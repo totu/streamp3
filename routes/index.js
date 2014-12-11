@@ -18,14 +18,19 @@ router.get('/', function(req, res) {
 router.get('/play/:file', function(req, res) {
   var file = req.param("file");
   var filePath = audio_location + decodeURI(file);
-  var stat = fs.statSync(filePath);
-  res.writeHead(200, {
-    'Content-Type': 'audio/mpeg',
-    'Content-Length': stat.size
-  });
+  if (fs.existsSync(filePath)) {
+    var stat = fs.statSync(filePath);
 
-  var readStream = fs.createReadStream(filePath);
-  readStream.pipe(res);
+    res.writeHead(200, {
+      'Content-Type': 'audio/mpeg',
+      'Content-Length': stat.size
+    });
+
+    var readStream = fs.createReadStream(filePath);
+    readStream.pipe(res);
+  } else {
+    res.redirect('/test');
+  }
 });
 
 
