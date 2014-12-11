@@ -1,10 +1,10 @@
 var express = require('express');
 var router = express.Router();
+var fs = require('fs');
 var audio_location = __dirname + "/../audio/";
 
 /* GET home page. */
 router.get('/', function(req, res) {
-  var fs = require('fs');
   var audio = [];
   var tmp = null;
   fs.readdir(audio_location , function(err, files) {
@@ -14,6 +14,20 @@ router.get('/', function(req, res) {
     res.render('index', { title: 'Express', results: tmp, files: audio });
   });
 });
+
+router.get('/play/:file', function(req, res) {
+  var file = req.param("file");
+  var filePath = audio_location + decodeURI(file);
+  var stat = fs.statSync(filePath);
+  res.writeHead(200, {
+    'Content-Type': 'audio/mpeg',
+    'Content-Length': stat.size
+  });
+
+  var readStream = fs.createReadStream(filePath);
+  readStream.pipe(res);
+});
+
 
 router.get('/test', function(req, res) {
   res.render('test');

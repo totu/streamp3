@@ -10,7 +10,9 @@ block content
     each file in files
       tr
         td
-          a(href="/play?" + file.file)
-            div.file= file.name
+          a(href="/play/" + file.file)
+            div.file
+              span.glyphicon.glyphicon-play.play-button
+              span= file.name
 
   p= results
