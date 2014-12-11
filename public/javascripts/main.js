@@ -12,6 +12,13 @@ $(document).ready(function() {
   });
 
   // Upload
+  $('.file').click(function() {
+    if ($(this).data('back'))
+      window.location.href = "/";
+    else
+      window.location.href = $(this).data('file');
+  });
+
   $('#upload').click(function() {
     bootbox.dialog({
       title: "Upload a new audio file",

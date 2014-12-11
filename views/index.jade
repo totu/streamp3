@@ -13,10 +13,26 @@ block content
 
   table.table.table-striped
     each file in files
+      if file.sub
+        tr
+          td
+            div(data-back="true").file
+              span.glyphicon.glyphicon-share-alt.backwards.play-button
+              span Back
+
       tr
         td
           div(data-file=file.file).file
-            span.glyphicon.glyphicon-play.play-button
+            if file.dir
+              if file.sub
+                span.glyphicon.glyphicon-folder-open.play-button.sub
+              else
+                span.glyphicon.glyphicon-folder-open.play-button
+            else
+              if file.sub
+                span.glyphicon.glyphicon-play.play-button.sub
+              else
+                span.glyphicon.glyphicon-play.play-button
             span= file.name
 
   div#player_container
