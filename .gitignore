@@ -34,3 +34,6 @@ audio/
 # ansible
 devops/templates/keys
 credential_vars.yml
+
+#
+public/stylesheets/*.css
