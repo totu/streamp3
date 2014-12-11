@@ -1,4 +1,17 @@
 $(document).ready(function() {
+
+  // Player
+  filepath = "";
+
+  $('.file').click(function() {
+    filepath = this.getAttribute('data-file');
+    if($('#player').length){
+      $('#player').remove();
+    }
+    $('#player_container').append( "<audio id='player' autoplay='autoplay' controls='controls'>  <source src='play/" + filepath + "' /> </audio> " );
+  });
+
+  // Upload
   $('#upload').click(function() {
     bootbox.dialog({
       title: "Upload a new audio file",
