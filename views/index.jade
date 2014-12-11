@@ -1,5 +1,12 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  nav(role='navigaton').navbar.navbar-static-top.navbar-inverse
+    div.container-fluid
+      div.navbar-header
+        a(href='#').navbar-brand Streamer
+
+  ul
+   each file in files
+    li= file.name
+      span= file.file
