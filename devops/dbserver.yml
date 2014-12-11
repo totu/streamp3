@@ -1,0 +1,54 @@
+- hosts: webservers
+  remote_user: vagrant
+  sudo: yes
+  vars_files:
+    - vars.yml
+    - credential_vars.yml
+  tasks:
+    - name: Install PostgreSQL server and client
+      action: apt pkg={{item}} state=installed
+      with_items:
+        - postgresql
+        - postgresql-contrib
+        - libpq-dev
+        - python-psycopg2
+
+    - name: Start the postgresql service
+      action: service name=postgresql state=started
+
+- hosts: webservers
+  remote_user: vagrant
+  sudo_user: postgres
+  sudo: yes
+  vars_files:
+    - vars.yml
+    - credential_vars.yml
+
+  tasks:
+    - name: Remove the test database
+      postgresql_db: name=test state=absent
+
+    - name: Create deploy user for postgresql
+      postgresql_user: name="deploy" password={{postgresql_root_password}}
+
+    - name: Ensure anonymous users are not in the database
+      postgresql_user: name='' state=absent
+
+# create databases and users for application
+    - name: Create app production database
+      postgresql_db: name={{production_dbname}} lc_collate=en_US.utf8 encoding=utf8 lc_ctype=en_US.utf8 template=template0
+
+    - name: Create app development database
+      postgresql_db: name={{development_dbname}} lc_collate=en_US.utf8 encoding=utf8 lc_ctype=en_US.utf8 template=template0
+
+    - name: Create app test database
+      postgresql_db: name={{test_dbname}} lc_collate=en_US.utf8 encoding=utf8 lc_ctype=en_US.utf8 template=template0
+
+    - name: Create application user for production
+      postgresql_user: db={{production_dbname}} name={{dbuser}} password={{dbpassword}} priv=ALL
+
+    - name: Create application user for development
+      postgresql_user: db={{development_dbname}} name={{dbuser}} password={{dbpassword}} priv=ALL
+
+    - name: Create application user for test
+      postgresql_user: db={{test_dbname}} name={{dbuser}} password={{dbpassword}} priv=ALL role_attr_flags=SUPERUSER

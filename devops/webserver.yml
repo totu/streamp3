@@ -1,0 +1,53 @@
+- hosts: webservers
+  remote_user: vagrant
+  sudo: yes
+  vars_files:
+    - vars.yml
+    - credential_vars.yml
+  vars:
+    deploy: deploy
+    home_dir: /home/deploy
+    locale: en_US.utf8
+
+  tasks:
+    - name: Update apt cache
+      apt: update_cache=yes
+
+    - name: set locale
+      command: /usr/sbin/update-locale LANG={{ locale }} LC_ALL={{locale}}
+
+    - name: Install Linux packages
+      action: apt pkg={{item}} state=installed
+      with_items:
+        - autoconf
+        - automake
+        - bison
+        - build-essential
+        - curl
+        - libcurl3
+        - libcurl3-gnutls
+        - libcurl4-openssl-dev
+        - gawk
+        - git-core
+        - git
+        - libxml2-dev
+        - libxml2
+        - libxslt1-dev
+        - libffi-dev
+        - libyaml-dev
+        - libssl-dev
+        - libsqlite3-dev
+        - libgdbm-dev
+        - libncurses5-dev
+        - libreadline6-dev
+        - libtool
+        - libyaml-dev
+        - nfs-common # make virtualbox faster
+        - pkg-config
+        - sqlite3
+        - vim
+        - zlib1g-dev
+        - imagemagick
+        - gcc
+        - g++
+        - make

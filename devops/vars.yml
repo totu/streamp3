@@ -1,0 +1,10 @@
+---
+app_name: tyomatkaliikunta
+home_dir: "/home/deploy"
+
+ruby_version: "2.1.5"
+
+# db
+production_dbname: prod_com
+development_dbname: dev_com
+test_dbname: test_com

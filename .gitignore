@@ -27,3 +27,10 @@ audio/
 
 # Users Environment Variables
 .lock-wscript
+
+# vagrant
+.vagrant
+
+# ansible
+devops/templates/keys
+credential_vars.yml
