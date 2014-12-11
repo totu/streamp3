@@ -3,7 +3,7 @@ var router = express.Router();
 var fs = require('fs');
 var audio_location = __dirname + "/../audio/";
 
-/* GET home page. */
+/* GET */
 router.get('/', function(req, res) {
   var audio = [];
   var tmp = null;
@@ -35,6 +35,24 @@ router.get('/play/:file', function(req, res) {
 
 
 router.get('/test', function(req, res) {
-  res.render('test');
+  //res.render('test');
+  res.json({"test": "asd"});
 });
+
+
+/* POST */
+router.post('/upload', function(req, res) {
+  var file = req.query.file;
+  fs.readFile(file.path, function(err, data) {
+    var path = audio_location + file.name;
+    fs.writeFile(path, data, function(err) {
+      if (err) {
+        res.json({"upload": false, "error": err});
+      } else {
+        res.json({"upload": true});
+      }
+    });
+  });
+});
+
 module.exports = router;

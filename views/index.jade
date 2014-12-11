@@ -4,15 +4,17 @@ block content
   nav(role='navigaton').navbar.navbar-static-top.navbar-inverse
     div.container-fluid
       div.navbar-header
-        a(href='#').navbar-brand Streamer
+        a(href='#').navbar-brand
+          strong.logo-normal Audio
+          span.lobster.logo-lobster Streamer
+      div.navbar-right
+        a(href='#').navbar-text.right
+          span#upload.glyphicon.glyphicon-cloud-upload.larger-font
 
   table.table.table-striped
     each file in files
       tr
         td
-          a(href="/play/" + file.file)
-            div.file
-              span.glyphicon.glyphicon-play.play-button
-              span= file.name
-
-  p= results
+          div(data-file=file.file).file
+            span.glyphicon.glyphicon-play.play-button
+            span= file.name
