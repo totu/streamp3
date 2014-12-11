@@ -6,7 +6,11 @@ block content
       div.navbar-header
         a(href='#').navbar-brand Streamer
 
-  ul
-   each file in files
-    li= file.name
-      span= file.file
+  table.table.table-striped
+    each file in files
+      tr
+        td
+          a(href="/play?" + file.file)
+            div.file= file.name
+
+  p= results
