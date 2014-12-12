@@ -1,25 +1,34 @@
 var express = require('express');
 var router = express.Router();
 var fs = require('fs');
+var id3 = require('id3js');
+var getSize = require('get-folder-size');
 var audio_location = __dirname + "/../audio/";
 
 var get_files = function(path, sub, callback) {
   var audio = [];
-  fs.readdir(path, function(err, files) {
-    for (var i=0; i<files.length; i++) {
-      if (sub) {
-        var obj = {"file": path.split(audio_location)[1] + files[i], "name": files[i].split('.mp3')[0], sub: true};
-        obj.sub = true;
-      } else {
-        var obj = {"file": files[i], "name": files[i].split('.mp3')[0]};
+  var ticker = 0;
+  getSize(path, function(ress, size) {
+    fs.readdir(path, function(err, files) {
+      for (var i=0; i<files.length; i++) {
+        var obj = {"name": files[i].split('.mp3')[0].split('.MP3')[0].replace(/_/g,' ')};
+
+        if (sub) {
+          obj.file = path.split(audio_location)[1] + files[i]
+          obj.sub = true;
+        } else {
+          obj.file = files[i];
+        }
+
+        if (fs.lstatSync(path + files[i]).isDirectory()) {
+          obj.dir = true;
+        }
+
+        audio.push(obj);
+
       }
-      if (fs.lstatSync(path + files[i]).isDirectory()) {
-        obj.dir = true;
-      }
-      audio.push(obj);
-    }
-    data = audio
-    callback(data);
+      callback(audio, size);
+    });
   });
 }
 
@@ -27,19 +36,22 @@ var get_files = function(path, sub, callback) {
 router.get('/', function(req, res) {
   var audio = [];
   var path = audio_location;
-  get_files(path, false, function(data) {
+  get_files(path, false, function(data, size) {
     audio = data;
-    res.render('index', { title: 'Express', files: audio });
+    res.render('index', { title: 'Express', files: audio, size: size });
+    console.log('render');
   });
 });
 
-router.get('/:file', function(req, res) {
+router.get(['/:file', '/:subfolder/:file'], function(req, res) {
   var file = req.param("file");
+  if (req.param("subfolder")) file = req.param("subfolder") + "/" + req.param("file");
   var filePath = audio_location + decodeURI(file);
   if (fs.existsSync(filePath)) {
     if (fs.lstatSync(filePath).isDirectory()) {
-      get_files(filePath + "/", true, function(data) {
-        res.render('index', { title: 'Express', files: data });
+      get_files(filePath + "/", true, function(data, size) {
+        res.render('index', { title: 'Express', files: data, size: size });
+        console.log('render');
       });
     } else {
       var stat = fs.statSync(filePath);
@@ -55,6 +67,12 @@ router.get('/:file', function(req, res) {
   } else {
     res.redirect('/test');
   }
+});
+
+router.get(['/data/:file', '/data/:subfolder/:file'], function(req, res) {
+  id3({ file: audio_location + req.param("subfolder") + "/" + req.param("file"), type: id3.OPEN_LOCAL }, function(err, tags) {
+    res.json(tags);
+  });
 });
 
 router.get('/test', function(req, res) {
