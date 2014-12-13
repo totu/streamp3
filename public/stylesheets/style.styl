@@ -1,5 +1,6 @@
 *
   font-family: 'Raleway', sans-serif
+  font-size: large
 
 .lobster
   font-family: 'Lobster', cursive !important
@@ -7,11 +8,17 @@
 .logo-normal
   font-size: 20px
 
-#upload:hover
-  color: #fff
+.logo-lobster
+  font-size: 22px
 
 .navbar
   margin-bottom: 0 !important
+
+.navbar-header
+  min-width: 100%
+
+span.warning
+  color: #F0AD4E !important
 
 div.file
   width: 100%
@@ -23,6 +30,7 @@ div.file:hover
 
 table
   border-bottom: 1px solid #ddd
+  margin: 53px 0 !important
 
 .play-button
   text-align: center
@@ -35,9 +43,6 @@ table
 
 .navbar-brand
   font-size: 24px !important
-
-.navbar-header
-  width: 100% !important
 
 .sub
   margin-left: 25px
@@ -53,6 +58,79 @@ table
 .folder-size
   font-family: 'Montserrat', sans-serif
   font-weigth: 400
-  font-size: 14px
+  font-size: 16px
   padding: 0 25px 0 0
+  margin: 0
   float: right
+
+.selected
+  color: #337AB7
+
+#player-frame
+  display: none
+  text-align: center
+  height: 53px
+  width: 100%
+  background: #222
+  border-radius: 0
+  position: fixed
+  bottom: 0
+  z-index: 1000
+  color: #9D9D9D
+
+#play, #mute, #skip-back, #skip-forward
+  font-size: 30px
+  padding: 10px
+  width: 53px
+  background: #222
+
+#play:hover, #mute:hover, #skip-back:hover, #skip-forward:hover
+  cursor: pointer
+
+#play:active, #mute:active, #skip-back:active, #skip-forward:active
+  color: #337AB7
+
+#play
+  position: absolute
+  left: 0
+  border-right: 1px solid #2b2b2b
+
+#mute
+  position: absolute
+  right: 0
+  border-left: 1px solid #2b2b2
+  padding-left: 16px
+
+#skip-back
+  position: absolute
+  left: 53px
+  border-right: 1px solid #2b2b2b
+
+#skip-forward
+  position: absolute
+  right: 53px
+  border-right: 1px solid #2b2b2b
+
+#progress
+  background: #2b2b2b !important
+  height: 100%
+  margin: 0 106px !important
+  padding: 0
+  border-radius: 0
+
+#progressbar, #seekbar
+  height: 100%
+  color: #222
+  font-family: 'Montserrat', sans-serif
+  position: relative
+  top: -53px
+  z-index: 1
+
+#seekbar
+  display: none
+
+#seeker
+  height: 100%
+  position: relative
+  z-index: 10
+  opacity: 0.0

@@ -1,13 +1,15 @@
 extends layout
 
 block content
-  nav(role='navigaton').navbar.navbar-static-top.navbar-inverse
+  nav(role='navigaton').navbar.navbar-fixed-top.navbar-inverse
     div.container-fluid
       div.navbar-header
         a(href='#').navbar-brand
           strong.logo-normal Audio
           span.lobster.logo-lobster Streamer
         span.navbar-text.navbar-right.folder-size= Math.floor(size/1024/1024) + " MB"
+        span.navbar-text.navbar-right.current-time.folder-size
+        span.navbar-text.navbar-right.seek-time.folder-size.warning
 
   table.table.table-striped
     if files[0].sub
@@ -30,8 +32,20 @@ block content
           else
             div(data-file=file.file).file.playable
               if file.sub
-                span.glyphicon.glyphicon-play.play-button.sub
+                span.glyphicon.glyphicon-music.play-button.sub
               else
-                span.glyphicon.glyphicon-play.play-button
+                span.glyphicon.glyphicon-music.play-button
               span.file-name
+              span.artist-name
 
+  div#player-frame
+    audio#player
+      source#source(type="audio/mpeg")
+    span#play.glyphicon.glyphicon-play
+    span#skip-back.glyphicon.glyphicon-step-backward
+    div.progress#progress
+      input(type='range')#seeker
+      div(role='progressbar', aria-valuemin='0', aria-valuemax='100', aria-valuenow='0')#progressbar.progress-bar
+      div(role='progressbar', aria-valuemin='0', aria-valuemax='100', aria-valuenow='0')#seekbar.progress-bar.progress-bar-warning
+    span#skip-forward.glyphicon.glyphicon-step-forward
+    span#mute.glyphicon.glyphicon-volume-down
