@@ -5,12 +5,30 @@ html
     meta(http-equiv="X-UA-Compatible", content="IE=edge")
     meta(name="viewport", content="width=device-width, initial-scale=1")
     title AudioStreamer
-    link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Lobster|Raleway|Montserrat')
+    link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Lobster|Raleway|Montserrat')
     link(rel='stylesheet', href='stylesheets/style.css')
-    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css')
+    link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css')
+
   body
-    block content
-    script(src='https://code.jquery.com/jquery-2.1.1.min.js')
-    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js')
+    div.container-fluid.main-container
+      nav(role='navigaton').navbar.navbar-fixed-top.navbar-inverse
+        div.container-fluid
+          div.navbar-header
+            a(href='/').navbar-brand
+              strong.logo-normal Audio
+              span.lobster.logo-lobster Streamer
+            span.navbar-text.navbar-right.folder-size= Math.floor(size/1024/1024) + " MB"
+            span.navbar-text.navbar-right.current-time.folder-size
+            span.navbar-text.navbar-right.seek-time.folder-size.info
+      div.container-fluid.main-container
+        block content
+
+    footer.footer
+      div.container
+        p.text-muted made by&nbsp;
+          a(href="//github.com/totu").text-muted totu
+
+    script(src='//code.jquery.com/jquery-2.1.1.min.js')
+    script(src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js')
     script(src='javascripts/bootbox.min.js')
     script(src='javascripts/main.js')

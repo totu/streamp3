@@ -3,14 +3,20 @@ var PBInterval = null;
 var drawProgress = function() {
   var length = $('#player')[0].duration;
   var pos = $('#player')[0].currentTime;
-
-  $('#progressbar').attr('aria-valuenow', pos/length*100).css('width', pos/length*100 +'%');
-
-  var s = parseInt(pos % 60);
-  if (s < 10) s = "0" + s;
-  var m = parseInt((pos / 60) % 60);
-
-  $('.current-time').html(m + ':' + s);
+  if (pos >= length) {
+    clearInterval(PBInterval);
+    PBInterval = null;
+    $('#play').removeClass('glyphicon-pause playing').addClass('glyphicon-play');
+    $('#progressbar').removeClass('progress-bar').addClass('progress-bar-success');
+    $('#player')[0].stop();
+  } else {
+    if ($('#progressbar').hasClass('progress-bar-success')) $('#progressbar').removeClass('progress-bar-success').addClass('progress-bar');
+    $('#progressbar').attr('aria-valuenow', pos/length*100).css('width', pos/length*100 +'%');
+    var s = parseInt(pos % 60);
+    if (s < 10) s = "0" + s;
+    var m = parseInt((pos / 60) % 60);
+    $('.current-time').html(m + ':' + s);
+  }
 };
 
 var toggleProgressbar = function() {
@@ -18,8 +24,7 @@ var toggleProgressbar = function() {
   if ($('#play').hasClass('playing')) {
     PBInterval = setInterval(function() {
       drawProgress();
-      //console.log('call' + new Date());
-    }, 1000);
+    }, 500);
   } else {
     clearInterval(PBInterval);
     PBInterval = null;
@@ -39,13 +44,10 @@ var seeking = function(time) {
   $('#seekbar, .seek-time').css('display','block');
   var length = $('#player')[0].duration;
   var pos = length/100*time;
-
   $('#seekbar').attr('aria-valuenow', time).css('width', time +'%');
-
   var s = parseInt(pos % 60);
   if (s < 10) s = "0" + s;
   var m = parseInt((pos / 60) % 60);
-
   $('.seek-time').html(m + ':' + s);
 };
 
@@ -68,11 +70,10 @@ $(document).ready(function() {
       $('#source').attr('src', '/' + $(this).data('file'));
       $('#player')[0].pause();
       $('#player')[0].load();
-      $('#player-frame').css('display','block');
+      if ($('#player-frame').css('display') == 'none') $('#player-frame').css('display','block');
       $('#player')[0].play();
-      $('#play').addClass('playing');
+      $('#play').addClass('playing glyphicon-pause');
       $('#play').removeClass('glyphicon-play');
-      $('#play').addClass('glyphicon-pause');
       toggleProgressbar();
     } else {
       window.location.href = $(this).data('file');
@@ -82,14 +83,12 @@ $(document).ready(function() {
   $('#play').click(function() {
     if ($(this).hasClass('playing')) {
       $('#player')[0].pause();
-      $(this).removeClass('playing');
-      $(this).removeClass('glyphicon-pause');
+      $(this).removeClass('playing glyphicon-pause');
       $(this).addClass('glyphicon-play');
     } else {
       $('#player')[0].play();
-      $(this).addClass('playing');
       $(this).removeClass('glyphicon-play');
-      $(this).addClass('glyphicon-pause');
+      $(this).addClass('playing glyphicon-pause');
     }
     toggleProgressbar();
   });
@@ -97,14 +96,12 @@ $(document).ready(function() {
   $('#mute').click(function() {
     if ($(this).hasClass('muted')) {
       $('#player')[0].muted = false;
-      $(this).removeClass('muted');
-      $(this).removeClass('glyphicon-volume-off');
+      $(this).removeClass('muted glyphicon-volume-off');
       $(this).addClass('glyphicon-volume-down');
     } else {
       $('#player')[0].muted = true;
-      $(this).addClass('muted');
       $(this).removeClass('glyphicon-volume-down');
-      $(this).addClass('glyphicon-volume-off');
+      $(this).addClass('muted glyphicon-volume-off');
     }
   });
 
