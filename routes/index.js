@@ -39,7 +39,6 @@ router.get('/', function(req, res) {
   get_files(path, false, function(data, size) {
     audio = data;
     res.render('index', { title: 'Express', files: audio, size: size });
-    console.log('render');
   });
 });
 
@@ -51,7 +50,6 @@ router.get(['/:file', '/:subfolder/:file'], function(req, res) {
     if (fs.lstatSync(filePath).isDirectory()) {
       get_files(filePath + "/", true, function(data, size) {
         res.render('index', { title: 'Express', files: data, size: size });
-        console.log('render');
       });
     } else {
       var stat = fs.statSync(filePath);
