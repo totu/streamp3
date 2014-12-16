@@ -1,4 +1,5 @@
 var PBInterval = null;
+var base = '/stream';
 
 var drawProgress = function() {
   var length = $('#player')[0].duration;
@@ -53,10 +54,10 @@ var seeking = function(time) {
 
 window.addEventListener('load', function() {
   $(document).ready(function() {
-    $.get('/content' + window.location.pathname, function(data) {
+    $.get(base + '/content' + window.location.pathname.replace(new RegExp(base, 'g'), ''), function(data) {
       var html = "";
       var sub = false;
-      if ($.grep(window.location.pathname.split('/'),function(n){return(n)}).length > 0) {
+      if ($.grep(window.location.pathname.replace(new RegExp(base, 'g'), '').split('/') ,function(n){return(n)}).length > 0) {
         sub = true;
         html += "<tr><td><div data-back='true' class='file'><span class='glyphicon glyphicon-share-alt backwards play-button'></span><span>Back</span>";
       }
@@ -88,7 +89,7 @@ window.addEventListener('load', function() {
 
       $('.file').click(function() {
         if ($(this).data('back')) {
-          window.location.href = '/';
+          window.location.href = '';
         } else if ($(this).hasClass('playable')) {
           $('.file').each(function() { $(this).removeClass('selected'); });
           $(this).addClass('selected');

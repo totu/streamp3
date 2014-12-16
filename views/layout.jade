@@ -1,6 +1,7 @@
 doctype html
 html
   head
+    base(href='/stream/')
     meta(charset="utf-8")
     meta(http-equiv="X-UA-Compatible", content="IE=edge")
     meta(name="viewport", content="width=device-width, initial-scale=1")
@@ -8,7 +9,7 @@ html
     script.
       var cb = function() {
         var l = document.createElement('link'); l.rel = 'stylesheet';
-        l.href = '/stylesheets/style.css';
+        l.href = 'stylesheets/style.css';
         var h = document.getElementsByTagName('head')[0]; h.parentNode.insertBefore(l, h);
       }
       var raf = requestAnimationFrame || mozRequestAnimationFrame ||webkitRequestAnimationFrame || msRequestAnimationFrame;
@@ -20,7 +21,7 @@ html
       nav(role='navigaton').navbar.navbar-fixed-top.navbar-inverse
         div.container-fluid
           div.navbar-header
-            a(href='/').navbar-brand
+            a(href='').navbar-brand
               strong.logo-normal Audio
               span.lobster.logo-lobster Streamer
             span.navbar-text.navbar-right.folder-size.size
@@ -34,6 +35,6 @@ html
         p.text-muted made by&nbsp;
           a(href="//github.com/totu").text-muted totu
 
-    script(async src='/javascripts/jquery-2.1.1.min.js')
-    script(async src='/javascripts/main.js')
+    script(async src='javascripts/jquery-2.1.1.min.js')
+    script(async src='javascripts/main.js')
 

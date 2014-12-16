@@ -3,7 +3,8 @@ var router = express.Router();
 var fs = require('fs');
 var id3 = require('id3js');
 var getSize = require('get-folder-size');
-var audio_location = __dirname + "/../audio/";
+var audio_location = __dirname + '/../audio/';
+
 
 /* GET */
 router.get('/', function(req, res) {
@@ -12,6 +13,7 @@ router.get('/', function(req, res) {
 
 router.get('/content/*', function(req, res) {
   var path = audio_location + req.params[0] + "/";
+  console.log(path + "1111");
   var audio = [];
   var sub = false;
   getSize(path, function(ress, size) {
@@ -47,6 +49,7 @@ router.get('/data/*', function(req, res) {
 
 router.get('/*', function(req, res) {
   var filePath = audio_location + decodeURI(req.params[0]);
+  console.log(filePath + "********************");
   if (fs.existsSync(filePath)) {
     if (fs.lstatSync(filePath).isDirectory()) {
       res.render('index', { title: 'Express', files: {}, size: 0 });
