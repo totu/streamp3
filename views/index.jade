@@ -3,31 +3,6 @@ extends layout
 block content
 
   table.table.table-striped
-    if files[0].sub
-      tr
-        td
-          div(data-back="true").file
-            span.glyphicon.glyphicon-share-alt.backwards.play-button
-            span Back
-    each file in files
-
-      tr
-        td
-          if file.dir
-            div(data-file=file.file).file
-              if file.sub
-                span.glyphicon.glyphicon-folder-open.play-button.sub
-              else
-                span.glyphicon.glyphicon-folder-open.play-button
-              span.file-name= file.name
-          else
-            div(data-file=file.file).file.playable
-              if file.sub
-                span.glyphicon.glyphicon-music.play-button.sub
-              else
-                span.glyphicon.glyphicon-music.play-button
-              span.file-name
-              span.artist-name
 
   div#player-frame
     audio#player

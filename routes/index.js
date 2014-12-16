@@ -5,9 +5,15 @@ var id3 = require('id3js');
 var getSize = require('get-folder-size');
 var audio_location = __dirname + "/../audio/";
 
-var get_files = function(path, sub, callback) {
+/* GET */
+router.get('/', function(req, res) {
+  res.render('index');
+});
+
+router.get('/content/*', function(req, res) {
+  var path = audio_location + req.params[0] + "/";
   var audio = [];
-  var ticker = 0;
+  var sub = false;
   getSize(path, function(ress, size) {
     fs.readdir(path, function(err, files) {
       for (var i=0; i<files.length; i++) {
@@ -27,30 +33,23 @@ var get_files = function(path, sub, callback) {
         audio.push(obj);
 
       }
-      callback(audio, size);
+      res.json({"resp":audio, "size":size});
     });
-  });
-}
-
-/* GET */
-router.get('/', function(req, res) {
-  var audio = [];
-  var path = audio_location;
-  get_files(path, false, function(data, size) {
-    audio = data;
-    res.render('index', { title: 'Express', files: audio, size: size });
   });
 });
 
-router.get(['/:file', '/:subfolder/:file'], function(req, res) {
-  var file = req.param("file");
-  if (req.param("subfolder")) file = req.param("subfolder") + "/" + req.param("file");
-  var filePath = audio_location + decodeURI(file);
+
+router.get('/data/*', function(req, res) {
+  id3({ file: audio_location + req.params[0], type: id3.OPEN_LOCAL }, function(err, tags) {
+    res.json(tags);
+  });
+});
+
+router.get('/*', function(req, res) {
+  var filePath = audio_location + decodeURI(req.params[0]);
   if (fs.existsSync(filePath)) {
     if (fs.lstatSync(filePath).isDirectory()) {
-      get_files(filePath + "/", true, function(data, size) {
-        res.render('index', { title: 'Express', files: data, size: size });
-      });
+      res.render('index', { title: 'Express', files: {}, size: 0 });
     } else {
       var stat = fs.statSync(filePath);
 
@@ -63,14 +62,8 @@ router.get(['/:file', '/:subfolder/:file'], function(req, res) {
       readStream.pipe(res);
     }
   } else {
-    res.redirect('/test');
+    res.redirect('/');
   }
-});
-
-router.get(['/data/:file', '/data/:subfolder/:file'], function(req, res) {
-  id3({ file: audio_location + req.param("subfolder") + "/" + req.param("file"), type: id3.OPEN_LOCAL }, function(err, tags) {
-    res.json(tags);
-  });
 });
 
 router.get('/test', function(req, res) {
